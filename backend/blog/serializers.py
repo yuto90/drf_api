@@ -2,16 +2,6 @@ from rest_framework import serializers
 from .models import Blog, UserProfile
 
 
-class BlogSerializer(serializers.ModelSerializer):
-    created_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
-
-    class Meta:
-        model = Blog
-        # modelで設定したカラム名
-        fields = ('id', 'text', 'created_datetime',
-                  'updated_datetime', 'author')
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         # Serializersに紐付けるmodelを定義
@@ -42,3 +32,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
             password = validated_data.pop('password')
             instance.set_password(password)
         return super().update(instance, validated_data)
+
+
+class BlogSerializer(serializers.ModelSerializer):
+    created_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    # authorのserializerを上書き
+    author = UserProfileSerializer()
+
+    class Meta:
+        model = Blog
+        # modelで設定したカラム名
+        fields = ('id', 'text', 'created_datetime',
+                  'updated_datetime', 'author')
