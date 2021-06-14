@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 # AbstractBaseUserを利用してUserモデルをカスタマイズ
 from django.contrib.auth.models import AbstractBaseUser
 # PermissionsMixinを用いてUserの認証を行う
@@ -86,7 +87,7 @@ class Blog(models.Model):
 
     # 外部キー
     author = models.ForeignKey(
-        UserProfile, related_name='blog', on_delete=models.CASCADE, default=1)
+        settings.AUTH_USER_MODEL, related_name='blog', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.title
