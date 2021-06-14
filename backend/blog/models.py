@@ -7,16 +7,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 
 
-class Blog(models.Model):
-    title = models.CharField(blank=False, null=False, max_length=150)
-    text = models.TextField(blank=True)
-    created_datetime = models.DateTimeField(auto_now_add=True)
-    updated_datetime = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
-
-
 class UserProfileManager(BaseUserManager):
     """ カスタムユーザーマネージャー """
 
@@ -24,7 +14,6 @@ class UserProfileManager(BaseUserManager):
     def create_user(self, email, name, password=None):
         """ ユーザー作成 """
 
-        # emailが入力されていないときはValueErrorを呼び出す
         if not email:
             raise ValueError('User must have an email address')
 
@@ -59,17 +48,16 @@ class UserProfileManager(BaseUserManager):
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     """ カスタムユーザーモデル """
 
-    # カラム名 = データ型（オプション）
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
 
-    # ユーザが退会したらここをFalseにする（論理削除）
+    # ユーザが退会したらfalseにして論理削除
     is_active = models.BooleanField(default=True)
 
-    # 管理画面にアクセスできるか
+    # 管理画面にアクセスを許可するか
     is_staff = models.BooleanField(default=False)
 
-    # Managerのメソッドを使えるようにする
+    # UserProfileManagerのメソッドを使えるようにする
     objects = UserProfileManager()
 
     # emailを利用したログイン認証に変更
@@ -80,13 +68,25 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     # 1つのnameフィールドで表示したいので、既存のメソッドをオーバーライド
     def get_full_name(self):
-        """Retrieve full name of user"""
         return self.name
 
     def get_short_name(self):
-        """Retrieve short name of user"""
         return self.name
 
     # 管理画面などで表示される文字列を定義
     def __str__(self):
         return self.email
+
+
+class Blog(models.Model):
+    title = models.CharField(blank=False, null=False, max_length=150)
+    text = models.TextField(blank=True)
+    created_datetime = models.DateTimeField(auto_now_add=True)
+    updated_datetime = models.DateTimeField(auto_now=True)
+
+    # 外部キー
+    author = models.ForeignKey(
+        UserProfile, related_name='blogs', on_delete=models.CASCADE, default=1)
+
+    def __str__(self):
+        return self.title
