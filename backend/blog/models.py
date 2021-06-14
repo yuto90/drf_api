@@ -86,7 +86,7 @@ class Blog(models.Model):
 
     # 外部キー
     author = models.ForeignKey(
-        UserProfile, related_name='blogs', on_delete=models.CASCADE, default=1)
+        UserProfile, related_name='blog', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.title

@@ -8,7 +8,8 @@ class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         # modelで設定したカラム名
-        fields = ('id', 'text', 'created_datetime', 'updated_datetime')
+        fields = ('id', 'text', 'created_datetime',
+                  'updated_datetime', 'author')
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
