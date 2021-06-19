@@ -6,7 +6,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         # Serializersに紐付けるmodelを定義
         model = UserProfile
-        # 管理したい項目を定義（タプル形式）
+        # APIとして出力したいカラムを定義（タプル形式）
         fields = ('id', 'email', 'name', 'password')
         extra_kwargs = {
             'password': {
@@ -36,11 +36,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class BlogSerializer(serializers.ModelSerializer):
     created_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    updated_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
     # authorのserializerを上書き
     author = UserProfileSerializer()
 
     class Meta:
         model = Blog
-        # modelで設定したカラム名
         fields = ('id', 'text', 'created_datetime',
                   'updated_datetime', 'author')
