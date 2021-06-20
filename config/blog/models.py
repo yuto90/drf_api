@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
+
 # AbstractBaseUserを利用してUserモデルをカスタマイズ
 from django.contrib.auth.models import AbstractBaseUser
+
 # PermissionsMixinを用いてUserの認証を行う
 from django.contrib.auth.models import PermissionsMixin
+
 # BaseUserManager利用してUserManagerモデルをカスタマイズ
 from django.contrib.auth.models import BaseUserManager
 
